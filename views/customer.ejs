@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>WELCOME TO HACKTIV8 BANK</h1>
+  <div>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Identity Number</th>
+          <th>Full Name</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (let i = 0; i < data.length; i++) {%>
+        <tr>
+          <td><%= data[i].identityNumber%></td>
+          <td><%= data[i].fullName%></td>
+          <td><a href="/customers/<%= data[i].id%>/accounts">View Account</a> || <a href="/customers/<%= data[i].id%>/editProfile">Edit Profile</a></td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+  <p><a href="/customers/register">REGISTER(NEW CUSTOMER)</a></p>
+</body>
+</html>

@@ -16,12 +16,30 @@ module.exports = (sequelize, DataTypes) => {
   };
   Account.init({
     type: DataTypes.STRING,
-    balance: DataTypes.FLOAT,
+    balance: {
+      type: DataTypes.FLOAT,
+      validate: {
+        minInput(value){
+          if(+value < 500000 && value != 0){
+            throw new Error('Minimum balance for new Accout: Rp500.000')
+          }
+        }
+      }
+    },
     customer_id: DataTypes.INTEGER,
     accountNumber: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Account',
+    hooks: {
+      beforeCreate(instance, options){
+        const number = (Math.random()*10).toString().replace('.', '').slice(0, 10)
+        instance.accountNumber = number
+        if(instance.balance === 0){
+          instance.balance = 500000
+        }
+      }
+    }
   });
   return Account;
 };

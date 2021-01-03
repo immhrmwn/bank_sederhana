@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    form label {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <form action="/customers/<%= data.id %>/editProfile" method="POST">
+      <label for="identityNumber">ID Number:</label><br><br>
+      <input type="text" name="identityNumber" id="identityNumber" placeholder="Input your ID number" value="<%= data.identityNumber %>"><br><br>
+      <label for="fullName">Full Name:</label><br><br>
+      <input type="text" name="fullName" id="fullName" placeholder="Input your full name" value="<%= data.fullName %>"><br><br>
+      <label for="address">Address:</label><br><br>
+      <input type="text" name="address" id="address" placeholder="Input your address" value="<%= data.address %>"><br><br>
+      <label for="birthDate">Birth Date::</label><br><br>
+      <input type="date" name="birthDate" id="birthDate" value="<%= data.birthDate.toISOString().slice(0,10) %>"><br><br>
+      <label>Gender:</label><br><br>
+      <input type="radio" name="gender" id="male" value="male" <%= data.gender === 'male' ? 'checked' : ''%> >
+      <label for="male">Male</label><br>
+      <input type="radio" name="gender" id="female" value="female" <%= data.gender === 'female' ? 'checked' : ''%> >
+      <label for="female">Female</label><br><br>
+      <input type="submit" value="REGISTER">
+    </form>
+  </div>
+</body>
+</html>

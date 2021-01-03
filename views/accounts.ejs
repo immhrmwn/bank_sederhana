@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <a href="/customers">BACK</a>
+  <h1>Good day, <%= name %></h1>
+  <div>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Account Number</th>
+          <th>Type</th>
+          <th>Balance</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (let i = 0; i < data.length; i++) {%>
+        <tr>
+          <td><%= data[i].accountNumber%></td>
+          <td><%= data[i].type%></td>
+          <td><%= formatCurrency(data[i].balance)%></td>
+          <td><a href="#">transfer</a></td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+  <br><br><br>
+  <h2>ADD ACCOUNT</h2>
+  <div>
+    <form action="/customers/<%= id %>/accounts" method="POST">
+    <label for="type">Account Type:</label><br><br>
+    <select name="type" id="type">
+      <option value="On Account">On Account</option>
+      <option value="Xtra Payroll">Xtra Payroll</option>
+      <option value="Tabunganku">Tabunganku</option>
+    </select><br><br>
+    <label for="balance">Balance:</label><br><br>
+    <input type="number" name="balance" id="balance" placeholder="Input min 500000"><br><br>
+    <input type="submit" value="SAVE">
+    </form>
+  </div>
+</body>
+</html>
