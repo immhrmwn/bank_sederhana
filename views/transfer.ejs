@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <p>Transfer From: <b><%= `${data.accountNumber} ${data.type} ${formatCurrency(data.balance)}` %> %></b></p>
+  <div>
+    <form action="/customers/<%= data.customer_id %>/accounts/<%= data.id %>/transfer" method="POST">
+      <label for="amount">Amount:</label>
+      <input type="number" name="amount" id="amount" placeholder="0"><br><br>
+      <label for="">Transfer To:</label>
+      <select name="idTf" id="idTf">
+        <% for (let i = 0; i < data2.length; i++) { %>
+        <option value="<%= data2[i].id %>"><%= `${data2[i].accountNumber} - ${data2[i].Customer.fullName}` %></option>
+        <% } %>
+      </select><br><br>
+      <input type="submit" value="TRANSFER">
+    </form>
+  </div>
+</body>
+</html>

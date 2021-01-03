@@ -24,7 +24,7 @@
           <td><%= data[i].accountNumber%></td>
           <td><%= data[i].type%></td>
           <td><%= formatCurrency(data[i].balance)%></td>
-          <td><a href="#">transfer</a></td>
+          <td><a href="/customers/<%= id %>/accounts/<%= data[i].id %>/transfer">transfer</a></td>
         </tr>
         <% } %>
       </tbody>

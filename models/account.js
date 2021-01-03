@@ -23,6 +23,11 @@ module.exports = (sequelize, DataTypes) => {
           if(+value < 500000 && value != 0){
             throw new Error('Minimum balance for new Accout: Rp500.000')
           }
+        },
+        moreThanZero(value){
+          if(+value < 0){
+            throw new Error('Insufficient balance')
+          }
         }
       }
     },
@@ -37,6 +42,11 @@ module.exports = (sequelize, DataTypes) => {
         instance.accountNumber = number
         if(instance.balance === 0){
           instance.balance = 500000
+        }
+      },
+      beforeUpdate(instance, options){
+        if(instance.balance < 0){
+          throw new Error('Insufficient balance')
         }
       }
     }

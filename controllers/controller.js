@@ -1,4 +1,6 @@
 const { Customer, Account } = require('../models')
+const checkBalance = require('../helpers/checkBalance')
+
 class Controller {
   static enter(req, res){
     res.send('<a href="/customers">enter</a>')
@@ -30,7 +32,11 @@ class Controller {
       res.redirect('/customers')
     })
     .catch(err => {
-      res.send(err)
+      const errmsg = []
+      err.errors.forEach(el => {
+        errmsg.push(el.message)
+      })
+      res.send(errmsg)
     })
   }
   static editProfile(req, res){
@@ -60,7 +66,11 @@ class Controller {
       res.redirect('/customers')
     })
     .catch(err => {
-      res.send(err)
+      const errmsg = []
+      err.errors.forEach(el => {
+        errmsg.push(el.message)
+      })
+      res.send(errmsg)
     })
   }
   static getAccount(req, res){
@@ -99,11 +109,66 @@ class Controller {
       res.redirect(`/customers/${custID}/accounts`)
     })
     .catch(err => {
+      const errmsg = []
+      err.errors.forEach(el => {
+        errmsg.push(el.message)
+      })
+      res.send(errmsg)
+    })
+  }
+  static transfer(req, res){
+    const accountID = +req.params.idAccount
+    let dataID;
+    Account.findByPk(accountID)
+    .then(data => {
+      dataID = data
+      return Account.findAll({
+        include: 'Customer'
+      })
+    })
+    .then(data => {
+      // console.log(data[0].Customer.fullName)
+      res.render('transfer', {
+        data: dataID,
+        data2: data
+      })
+    })
+    .catch(err => {
       res.send(err)
     })
   }
-  static transfer(req, res){}
-  static transferPost(req, res){}
+  static transferPost(req, res){
+    const idFrom = +req.params.idAccount
+    let balance
+    const idCus = +req.params.idCustomer
+    const amount = +req.body.amount
+    const idTf = +req.body.idTf
+    Account.findByPk(idFrom)
+    .then(data => {
+      balance = data.balance
+      checkBalance(balance, amount, res)
+      return Account.decrement('balance', {
+        by: amount,
+        where: {id: idFrom}
+      })
+    })
+    .then(data => {
+      return Account.increment('balance', {
+        by: amount,
+        where: {id: idTf}
+      })
+    })
+    .then(data => {
+      res.redirect(`/customers/${idCus}/accounts`)
+    })
+    .catch(err => {
+      const errmsg = []
+      err.errors.forEach(el => {
+        errmsg.push(el.message)
+      })
+      res.send(errmsg)
+    })
+  }
 }
 
 module.exports = Controller
