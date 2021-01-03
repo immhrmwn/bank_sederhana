@@ -139,23 +139,47 @@ class Controller {
   }
   static transferPost(req, res){
     const idFrom = +req.params.idAccount
-    let balance
     const idCus = +req.params.idCustomer
     const amount = +req.body.amount
     const idTf = +req.body.idTf
+    // let balance
+    // Account.findByPk(idFrom)
+    // .then(data => {
+    //   balance = data.balance
+    //   checkBalance(balance, amount, res)
+    //   return Account.decrement('balance', {
+    //     by: amount,
+    //     where: {id: idFrom}
+    //   })
+    // })
+    // .then(data => {
+    //   return Account.increment('balance', {
+    //     by: amount,
+    //     where: {id: idTf}
+    //   })
+    // })
+    // .then(data => {
+    //   res.redirect(`/customers/${idCus}/accounts`)
+    // })
     Account.findByPk(idFrom)
     .then(data => {
-      balance = data.balance
-      checkBalance(balance, amount, res)
-      return Account.decrement('balance', {
-        by: amount,
-        where: {id: idFrom}
+      let balance = data.balance - amount
+      return Account.update({balance: balance}, {
+        where: {
+          id: idFrom
+        },
+        individualHooks: true
       })
     })
     .then(data => {
-      return Account.increment('balance', {
-        by: amount,
-        where: {id: idTf}
+      return Account.findByPk(idTf)
+    })
+    .then(data => {
+      let balance = data.balance + amount
+      return Account.update({balance: balance}, {
+        where: {
+          id: idTf
+        }
       })
     })
     .then(data => {

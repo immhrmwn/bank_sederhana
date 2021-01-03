@@ -18,18 +18,13 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.STRING,
     balance: {
       type: DataTypes.FLOAT,
-      validate: {
-        minInput(value){
-          if(+value < 500000 && value != 0){
-            throw new Error('Minimum balance for new Accout: Rp500.000')
-          }
-        },
-        moreThanZero(value){
-          if(+value < 0){
-            throw new Error('Insufficient balance')
-          }
-        }
-      }
+      // validate: {
+      //   minInput(value){
+      //     if(+value < 500000 && value != 0){
+      //       throw new Error('Minimum balance for new Account: Rp500.000')
+      //     }
+      //   }
+      // }
     },
     customer_id: DataTypes.INTEGER,
     accountNumber: DataTypes.STRING
@@ -43,10 +38,17 @@ module.exports = (sequelize, DataTypes) => {
         if(instance.balance === 0){
           instance.balance = 500000
         }
+        if(instance.balance < 500000){
+          return Promise.reject({
+            errors:[{message: 'Minimum balance for new Accout: Rp500.000'}]
+          })  
+        }
       },
       beforeUpdate(instance, options){
         if(instance.balance < 0){
-          throw new Error('Insufficient balance')
+          return Promise.reject({
+            errors:[{message: 'Insufficient balance'}]
+          })
         }
       }
     }
